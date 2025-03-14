@@ -1,21 +1,11 @@
-from address_book import AddressBook
-from handler import command_parser, add_contact, show_phone, show_all, change_contact, add_birthday, show_birthday, birthdays, del_phone
-from pathlib import Path
-import pickle
+from handler import command_parser, add_contact, show_phone, show_all, change_contact, add_birthday, show_birthday, birthdays, del_phone, load, save_book
 
 
 def main():
 
     print("Welcome to the assistant bot!")
 
-    path = Path('contacts.pkl')
-
-    if path.exists() and path.is_file():
-
-        with open('contacts.pkl', 'rb') as file:
-            book = pickle.load(file)
-    else:
-        book = AddressBook()
+    book = load()
 
     while True:
 
@@ -56,15 +46,11 @@ def main():
                     print(birthdays(book))
 
             case "exit":
-                with open('contacts.pkl', 'wb') as file:
-                    pickle.dump(book, file)
-                print("Good bye!")
+                print(save_book(book))
                 break
 
             case "close":
-                with open('contacts.pkl', 'wb') as file:
-                    pickle.dump(book, file)
-                print("Good bye!")
+                print(save_book(book))
                 break
 
             case _:
