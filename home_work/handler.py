@@ -1,5 +1,7 @@
+from address_book import AddressBook
 from functools import wraps
-
+from pathlib import Path
+import pickle
 from record import Record
 
 
@@ -43,7 +45,7 @@ def input_error(func):
     return inner
 
 
-def command_parser(command):
+def command_parser(command: str):
 
     cmd, *args = command.split(' ')
     cmd = cmd.strip().lower()
@@ -52,7 +54,7 @@ def command_parser(command):
 
 
 @input_error
-def add_contact(args: list, book: dict):
+def add_contact(args: list, book: AddressBook):
 
     name, phone, *_ = args
     record = book.find(name)
@@ -70,7 +72,7 @@ def add_contact(args: list, book: dict):
 
 
 @input_error
-def change_contact(args: list, book: dict):
+def change_contact(args: list, book: AddressBook):
 
     name, old_phone, new_phone = args
     record = book.find(name)
@@ -82,7 +84,7 @@ def change_contact(args: list, book: dict):
 
 
 @input_error
-def show_phone(args: list, book: dict):
+def show_phone(args: list, book: AddressBook):
 
     name = args[0]
 
@@ -94,7 +96,7 @@ def show_phone(args: list, book: dict):
 
 
 @input_error
-def del_phone(args: list, book: dict):
+def del_phone(args: list, book: AddressBook):
 
     name, phone = args
     record = book.find(name)
@@ -108,7 +110,7 @@ def del_phone(args: list, book: dict):
         raise IndexError("Number is ubsent in contact")
 
 
-def show_all(book: dict):
+def show_all(book: AddressBook):
 
     if not book.data:
         return "No contacts in your phonebook"
@@ -118,7 +120,7 @@ def show_all(book: dict):
 
 
 @input_error
-def add_birthday(args: list, book: dict):
+def add_birthday(args: list, book: AddressBook):
 
     name, birth_date = args
     record = book.find(name)
@@ -131,7 +133,7 @@ def add_birthday(args: list, book: dict):
 
 
 @input_error
-def show_birthday(args: list, book: dict):
+def show_birthday(args: list, book: AddressBook):
 
     name = args[0]
     record = book.find(name)
@@ -145,6 +147,25 @@ def show_birthday(args: list, book: dict):
         raise ValueError(f"{name.title()}'s birthday not added")
 
 
-def birthdays(book: dict):
+def birthdays(book: AddressBook):
 
     return book.get_congrats()
+
+
+def load():
+
+    path = Path('contacts.pkl')
+
+    if path.exists() and path.is_file():
+
+        with open('contacts.pkl', 'rb') as file:
+            return pickle.load(file)
+    else:
+        return AddressBook()
+
+
+def save_book(book: AddressBook):
+
+    with open('contacts.pkl', 'wb') as file:
+        pickle.dump(book, file)
+        return "Good bye!"
