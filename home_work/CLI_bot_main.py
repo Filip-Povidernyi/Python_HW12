@@ -1,16 +1,16 @@
-from handler import command_parser, add_contact, show_phone, show_all, change_contact, add_birthday, show_birthday, birthdays, del_phone, load, save_book
+from handler import handlers
 
 
 def main():
 
     print("Welcome to the assistant bot!")
 
-    book = load()
+    book = handlers['load']()
 
     while True:
 
         command = input("Enter a command: ").strip().lower()
-        cmd, args = command_parser(command)
+        cmd, args = handlers['command_parser'](command)
 
         match cmd:
 
@@ -18,39 +18,39 @@ def main():
                 print("How can I help you?")
 
             case "add":
-                print(add_contact(args, book))
+                print(handlers['add_contact'](args, book))
 
             case "change":
-                print(change_contact(args, book))
+                print(handlers['change_contact'](args, book))
 
             case "phone":
-                print(show_phone(args, book))
+                print(handlers['show_phone'](args, book))
 
             case "del-phone":
-                print(del_phone(args, book))
+                print(handlers['del_phone'](args, book))
 
             case "all":
-                show_all(book)
+                handlers['show_all'](book)
 
             case "add-birthday":
-                print(add_birthday(args, book))
+                print(handlers['add_birthday'](args, book))
 
             case "show-birthday":
-                print(show_birthday(args, book))
+                print(handlers['show_birthday'](args, book))
 
             case "birthdays":
-                if isinstance(birthdays(book), list):
+                if isinstance(handlers['birthdays'](book), list):
                     print(f"Список привітань на цьому тижні:\n" +
-                          "\n".join(str(birthday) for birthday in birthdays(book)))
+                          "\n".join(str(birthday) for birthday in handlers['birthdays'](book)))
                 else:
-                    print(birthdays(book))
+                    print(handlers['birthdays'](book))
 
             case "exit":
-                print(save_book(book))
+                print(handlers['save_book'](book))
                 break
 
             case "close":
-                print(save_book(book))
+                print(handlers['save_book'](book))
                 break
 
             case _:
