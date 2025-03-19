@@ -1,8 +1,9 @@
-from address_book import AddressBook
 from functools import wraps
 from pathlib import Path
 import pickle
 from record import Record
+
+from address_book import AddressBook
 
 
 def input_error(func):
@@ -169,3 +170,18 @@ def save_book(book: AddressBook):
     with open('contacts.pkl', 'wb') as file:
         pickle.dump(book, file)
         return "Good bye!"
+
+
+handlers = {
+    'add_contact': add_contact,
+    'change_contact': change_contact,
+    'show_phone': show_phone,
+    'del_phone': del_phone,
+    'show_all': show_all,
+    'add_birthday': add_birthday,
+    'show_birthday': show_birthday,
+    'birthdays': birthdays,
+    'load': load,
+    'save_book': save_book,
+    'command_parser': command_parser
+}
